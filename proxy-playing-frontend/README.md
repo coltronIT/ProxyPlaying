@@ -1,6 +1,6 @@
 # proxy-playing-frontend
 
-Demo project showcasing the Proxy Pattern
+Demo project showcasing the Amazing Proxy Pattern
 
 ## Project Setup
 
