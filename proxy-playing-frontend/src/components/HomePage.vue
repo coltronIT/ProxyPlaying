@@ -9,6 +9,11 @@
       <div id="proxy-example-wrapper">
         <div class="music-item">
           <h3>With Proxy</h3>
+
+          <h2 v-if="proxySongDisplay !== ''">
+            {{ proxySongDisplay }}
+          </h2>
+
           <button
             class="play-button"
             @click="getSongUsingProxy"
@@ -19,17 +24,12 @@
         </div>
 
         <div class="music-item">
-          <h3>Performance Battle</h3>
-          <button
-            @click="performanceBattle"
-          >
-          VS
-          </button>
-          <h4></h4>
-        </div>
-    
-        <div class="music-item">
           <h3>No Proxy</h3>
+
+          <h2 v-if="noProxySongDisplay !== ''">
+            {{ noProxySongDisplay }}
+          </h2>
+
           <button
             class="play-button"
             @click="getSongUsingNoProxy"
@@ -51,45 +51,58 @@ import { ref } from 'vue'
 export default {
   setup() {
     const BASE_URL = 'http://127.0.0.1:5000'
+    const MAX_SONGS = 3
     const proxyLoadTime = ref('Awaiting analysis...')
     const noProxyLoadTime = ref('Awaiting analysis...')
+    const proxySongDisplay = ref('')
+    const noProxySongDisplay = ref('')
 
-    const timeIt = async (url, requestAttributes) => {
+    const retrieveDataAndTimeIt = async (url, requestAttributes) => {
       const startTime = performance.now()
 
       const result = await fetch(url, requestAttributes)
       .then(async (response) => {
-        return response.json().then((_) => {
+        return response.json().then((json) => {
           const endTime = performance.now()
-          return endTime - startTime
+          const timeTaken = endTime - startTime
+          return {
+            timeTaken: timeTaken.toFixed(2).toString() + ' ms',
+            songDisplay: json.songDisplay
+          }
         })
       })
       .catch((error) => {
         console.log(error)
       })
 
-      return result.toFixed(2).toString() + ' ms'
+      return result
+    }
+
+    const generateSongId = (maxSongs) => {
+      return Math.floor(Math.random() * maxSongs) + 1
     }
 
     const getSongUsingProxy = async () => {
-      proxyLoadTime.value = await timeIt(`${BASE_URL}/api/play/proxy`, { method: 'GET' })
+      const songId = generateSongId(MAX_SONGS)
+      const result = await retrieveDataAndTimeIt(`${BASE_URL}/api/play/proxy?songId=${songId}`, { method: 'GET' })
+      proxyLoadTime.value = result.timeTaken
+      proxySongDisplay.value = result.songDisplay
     }
 
     const getSongUsingNoProxy = async () => {
-      noProxyLoadTime.value = await timeIt(`${BASE_URL}/api/play`, { method: 'GET' })
-    }
-
-    const performanceBattle = async () => {
-      await getSongUsingNoProxy()
-      await getSongUsingProxy()
+      const songId = generateSongId(MAX_SONGS)
+      const result = await retrieveDataAndTimeIt(`${BASE_URL}/api/play?songId=${songId}`, { method: 'GET' })
+      noProxyLoadTime.value = result.timeTaken
+      noProxySongDisplay.value = result.songDisplay
     }
 
     return {
       proxyLoadTime,
       noProxyLoadTime,
+      proxySongDisplay,
+      noProxySongDisplay,
       getSongUsingProxy,
       getSongUsingNoProxy,
-      performanceBattle,
     }
   }
 }
