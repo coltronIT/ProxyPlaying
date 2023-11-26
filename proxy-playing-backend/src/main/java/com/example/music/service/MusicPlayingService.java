@@ -1,6 +1,9 @@
-package com.example.music;
+package com.example.music.service;
 
 import org.springframework.stereotype.Service;
+
+import com.example.music.MusicPlayer;
+import com.example.music.MusicPlayerProxy;
 
 @Service
 public class MusicPlayingService {

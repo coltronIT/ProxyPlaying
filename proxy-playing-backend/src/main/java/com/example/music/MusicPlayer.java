@@ -1,4 +1,5 @@
 package com.example.music;
+import com.example.music.dto.MusicServiceInterface;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,11 +16,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class MusicPlayer implements MusicService {
+public class MusicPlayer implements MusicServiceInterface {
 
     private Map<String, String> songs = new HashMap<>();
 
-    public MusicPlayer(){
+    public MusicPlayer() {
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -54,7 +55,7 @@ public class MusicPlayer implements MusicService {
         Map<String, String> songData = songs.stream().collect(Collectors.toMap(Song::getId, Song::getSongDisplay));
 
         this.songs = songData;
-    };
+    }
 
     public MusicPlayer(Map<String, String> songs) {
         this.songs = songs;

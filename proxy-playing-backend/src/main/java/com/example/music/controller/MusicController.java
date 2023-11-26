@@ -1,4 +1,4 @@
-package com.example.music;
+package com.example.music.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,20 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.music.service.MusicPlayingService;
+
 @RestController
 @RequestMapping("/api")
 public class MusicController {
 
     @Autowired
     MusicPlayingService musicPlayingService;
-//    private final MusicService expensiveMusicService;
-//    private final MusicService cachedMusicService;
-//
-//    @Autowired
-//    public MusicController(MusicPlayer expensiveMusicService, CachedMusicService cachedMusicService) {
-//        this.expensiveMusicService = expensiveMusicService;
-//        this.cachedMusicService = cachedMusicService;
-//    }
+
     @GetMapping("play/proxy")
     public ResponseEntity<Map<String, String>> playCachedSong(@RequestParam String songId) {
         Map<String, String> map = new HashMap<>();
@@ -36,4 +31,5 @@ public class MusicController {
         map.put("songDisplay", result);
         return ResponseEntity.ok(map);
     }
+
 }

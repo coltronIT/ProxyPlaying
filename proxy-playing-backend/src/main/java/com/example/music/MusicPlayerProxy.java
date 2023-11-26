@@ -19,12 +19,12 @@ public class MusicPlayerProxy {
     private MusicPlayer musicPlayer;
 
     public MusicPlayerProxy() {
-        this.musicPlayer = null;
-    };
+        musicPlayer = null;
+    }
 
     public String playSong(String songId) {
-        if (this.musicPlayer != null) {
-            return this.musicPlayer.playSong(songId);
+        if (musicPlayer != null) {
+            return musicPlayer.playSong(songId);
         } else {
             RestTemplate restTemplate = new RestTemplate();
             ObjectMapper mapper = new ObjectMapper();
