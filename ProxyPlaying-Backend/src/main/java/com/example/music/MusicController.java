@@ -1,5 +1,8 @@
 package com.example.music;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +21,19 @@ public class MusicController {
 //        this.expensiveMusicService = expensiveMusicService;
 //        this.cachedMusicService = cachedMusicService;
 //    }
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("play/proxy")
-    public ResponseEntity<String> playCachedSong(@RequestParam String songId) {
+    public ResponseEntity<Map<String, String>> playCachedSong(@RequestParam String songId) {
+        Map<String, String> map = new HashMap<>();
         String result = musicPlayingService.playSongWithProxy(songId);
-        return ResponseEntity.ok(result);
+        map.put("songDisplay", result);
+        return ResponseEntity.ok(map);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("play")
-    public ResponseEntity<String> playExpensiveSong(@RequestParam String songId) {
+    public ResponseEntity<Map<String, String>> playExpensiveSong(@RequestParam String songId) {
+        Map<String, String> map = new HashMap<>();
         String result = musicPlayingService.playSongWithoutProxy(songId);
-        return ResponseEntity.ok(result);
+        map.put("songDisplay", result);
+        return ResponseEntity.ok(map);
     }
 }

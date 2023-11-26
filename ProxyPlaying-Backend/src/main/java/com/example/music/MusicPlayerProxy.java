@@ -29,16 +29,15 @@ public class MusicPlayerProxy {
             RestTemplate restTemplate = new RestTemplate();
             ObjectMapper mapper = new ObjectMapper();
 
-
             String flaskAppUrl = "http://localhost:5000"; // URL of your Flask app
             String endpoint = "/api/all_songs"; // Endpoint in your Flask app that handles the song playing
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(flaskAppUrl + endpoint);
 
-            String parsedSongs = null;
+            String response = null;
 
             try {
-                parsedSongs = Objects.requireNonNull(
+                response = Objects.requireNonNull(
                         restTemplate.exchange(
                                 builder.toUriString(),
                                 HttpMethod.GET,
@@ -52,7 +51,7 @@ public class MusicPlayerProxy {
             List<Song> songs = null;
 
             try {
-                songs = mapper.readValue(parsedSongs, new TypeReference<List<Song>>(){});
+                songs = mapper.readValue(response, new TypeReference<List<Song>>(){});
             } catch (JsonMappingException e) {
                 e.printStackTrace();
             } catch (JsonProcessingException e) {
