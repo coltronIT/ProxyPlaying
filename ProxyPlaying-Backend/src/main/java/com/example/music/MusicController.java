@@ -18,13 +18,14 @@ public class MusicController {
 //        this.expensiveMusicService = expensiveMusicService;
 //        this.cachedMusicService = cachedMusicService;
 //    }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("play/proxy")
     public ResponseEntity<String> playCachedSong(@RequestParam String songId) {
         String result = musicPlayingService.playSongWithProxy(songId);
         return ResponseEntity.ok(result);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("play")
     public ResponseEntity<String> playExpensiveSong(@RequestParam String songId) {
         String result = musicPlayingService.playSongWithoutProxy(songId);
